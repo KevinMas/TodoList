@@ -11,17 +11,11 @@ import kotlin.coroutines.CoroutineContext
 /**
  *
  */
-class GetTodoUseCaseImpl(
-    private val todoRepository: TodoRepository,
-    private val dispatcher: CoroutineDispatcher
-): GetTodoUseCaseInterface, CoroutineScope {
+class GetTodoImpl(
+    private val todoRepository: TodoRepository
+): GetTodoInterface {
 
-    override suspend fun getAllTodo(): LiveData<List<Todo>> {
+    override fun getAllTodo(): LiveData<List<Todo>> {
         return todoRepository.getAllTodo()
     }
-
-    protected val jobTracker: Job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = dispatcher + jobTracker
 }

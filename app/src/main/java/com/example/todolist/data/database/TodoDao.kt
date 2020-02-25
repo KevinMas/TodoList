@@ -1,9 +1,7 @@
 package com.example.todolist.data.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.todolist.data.model.Todo
 
 /**
@@ -16,5 +14,11 @@ interface TodoDao {
     fun getAllTodo(): LiveData<List<Todo>>
 
     @Insert
-    fun insertTodo(todo: Todo)
+    fun insertTodo(todo: Todo): Long
+
+    @Update
+    fun updateTodo(todo: Todo)
+
+    @Delete
+    fun deleteTodo(todo: Todo)
 }

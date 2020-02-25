@@ -12,28 +12,28 @@ import com.example.todolist.data.model.Todo
 @Database(entities = [Todo::class], version = 1, exportSchema = false)
 abstract class TodoDatabase : RoomDatabase() {
 
-    abstract fun noteDao(): TodoDao
+    abstract fun todoDao(): TodoDao
 
     companion object {
-
+        @Volatile
         private var INSTANCE: TodoDatabase? = null
 
-        fun getInstance(context: Context): TodoDatabase? {
-            if (INSTANCE == null) {
-                synchronized(this) {
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        TodoDatabase::class.java, "todo_database"
-                    )
-                        .fallbackToDestructiveMigration()
-                        .build()
-                }
+        fun getInstance(context: Context): TodoDatabase {
+            val tempInstance = INSTANCE
+            if (tempInstance != null) {
+                return tempInstance
             }
-            return INSTANCE
+            synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    TodoDatabase::class.java,
+                    "todo_database"
+                ).build()
+                INSTANCE = instance
+                return instance
+            }
         }
     }
-
-
 
 
 }

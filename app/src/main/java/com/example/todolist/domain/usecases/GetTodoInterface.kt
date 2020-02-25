@@ -6,6 +6,6 @@ import com.example.todolist.data.model.Todo
 /**
  * TODOアイテムを追加するユースケース
  */
-interface GetTodoUseCaseInterface {
-    suspend fun getAllTodo(): LiveData<List<Todo>>
+interface GetTodoInterface {
+    fun getAllTodo(): LiveData<List<Todo>>
 }

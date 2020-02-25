@@ -9,5 +9,5 @@ data class Todo(
 
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "content") var mContent: String,
-    @ColumnInfo(name = "isComplete") var mIsCompleted: Boolean
+    @ColumnInfo(name = "done") var mDone: Boolean
 )
