@@ -7,7 +7,8 @@ import androidx.room.RoomDatabase
 import com.example.todolist.data.model.Todo
 
 /**
- *
+ * ROOMのデータベースクラスです。
+ * 取得したい場合は、クラス関数のgetInstanceを使ってくだい。
  */
 @Database(entities = [Todo::class], version = 1, exportSchema = false)
 abstract class TodoDatabase : RoomDatabase() {

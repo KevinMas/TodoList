@@ -5,12 +5,12 @@ import androidx.room.*
 import com.example.todolist.data.model.Todo
 
 /**
- *
+ * RoomにリクエストするDAOクラスです。
  */
 @Dao
 interface TodoDao {
 
-    @Query("SELECT * FROM todo_item_table")
+    @Query("SELECT * FROM todo_item_table ORDER BY ID DESC")
     fun getAllTodo(): LiveData<List<Todo>>
 
     @Insert
@@ -21,4 +21,11 @@ interface TodoDao {
 
     @Delete
     fun deleteTodo(todo: Todo)
+
+    @Query("DELETE FROM todo_item_table WHERE done = 1")
+    fun deleteAllCompleted()
+
+    @Query("UPDATE todo_item_table SET done = :value")
+    fun updateCompletion(value: Int)
+
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Todo List</string>
+  <string name="clear_completed">完了のを削除</string>
+  <string name="delete_todo_item">アイテムを削除する</string>
+  <string name="title_text">Todos</string>
+  <string name="todo_add_hint_text">しないといけないことは何ですか</string>
+</resources>

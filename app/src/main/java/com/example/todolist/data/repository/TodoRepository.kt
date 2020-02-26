@@ -5,7 +5,10 @@ import com.example.todolist.data.database.TodoDao
 import com.example.todolist.data.model.Todo
 
 /**
- *
+ * レポジトリクラスです。ViewModelと繋がって、
+ * 貰う情報をデータレイアに更新したり、ViewModelにデータを送ったりします。
+ * ここはAPIかロカルからデータを取得したり、更新したりする判断場所ですが、
+ * 今回はロカルだけで十分なので、判断は不要です。
  */
 class TodoRepository(private val todoDao: TodoDao) {
 
@@ -25,6 +28,12 @@ class TodoRepository(private val todoDao: TodoDao) {
         todoDao.deleteTodo(todo)
     }
 
-    // TODO insert, delete...
+    fun updateCompletion(done: Int) {
+        todoDao.updateCompletion(done)
+    }
+
+    fun deleteAllCompleted() {
+        todoDao.deleteAllCompleted()
+    }
 
 }

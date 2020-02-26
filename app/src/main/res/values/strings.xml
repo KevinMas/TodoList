@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Todo List</string>
+  <string name="todo_add_hint_text">What\'s need to be done</string>
+  <string name="title_text">Todos</string>
+  <string name="delete_todo_item">Delete Todo item.</string>
+  <string name="clear_completed">Clear completed</string>
 </resources>
