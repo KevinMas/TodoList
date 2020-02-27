@@ -5,4 +5,7 @@
   <string name="delete_todo_item">アイテムを削除する</string>
   <string name="title_text">Todos</string>
   <string name="todo_add_hint_text">しないといけないことは何ですか</string>
+  <string name="all">全部</string>
+  <string name="completed">完了</string>
+  <string name="active">無完了</string>
 </resources>

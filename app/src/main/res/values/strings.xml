@@ -4,4 +4,7 @@
   <string name="title_text">Todos</string>
   <string name="delete_todo_item">Delete Todo item.</string>
   <string name="clear_completed">Clear completed</string>
+  <string name="active">Active</string>
+  <string name="completed">Completed</string>
+  <string name="all">All</string>
 </resources>

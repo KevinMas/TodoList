@@ -12,14 +12,20 @@ import kotlin.coroutines.CoroutineContext
 /**
  * TodoビューをDATAレイアと栂ぐためのViewModelクラスです。
  */
-class TodoViewModel(application: Application) : AndroidViewModel(application), CoroutineScope {
+class TodoViewModel(application: Application) :
+    AndroidViewModel(application),
+    CoroutineScope {
 
-    private val todoRepository : TodoRepository
     // LiveData情報
     val todos : LiveData<List<Todo>>
 
-    // Coroutineようの準備
+    private val todoRepository : TodoRepository
+
+    // Coroutine用の準備
     private val jobTracker: Job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Default + jobTracker
 
     init {
         // レポジトリを準備する
@@ -27,8 +33,6 @@ class TodoViewModel(application: Application) : AndroidViewModel(application), C
         todoRepository = TodoRepository(todoDao)
         todos = todoRepository.getAllTodo()
     }
-
-    override val coroutineContext: CoroutineContext get() = Dispatchers.Default + jobTracker
 
     /**
      * TODOアイテムを登録する関数です
@@ -48,7 +52,7 @@ class TodoViewModel(application: Application) : AndroidViewModel(application), C
     /**
      * TODOアイテムをアップデートする関数です
      */
-    fun updateTodo(todo: Todo) = launch{
+    fun updateTodo(todo: Todo) = launch {
         todoRepository.updateTodo(todo)
     }
 
