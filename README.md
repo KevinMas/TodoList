@@ -1,5 +1,4 @@
 # TodoList
 
-A project to apply good architecture concept and learn more about Kotlin.
-
-This application is a Todo application that allows users to add todo item to a unique list.
+本プロジェクトはRoomやCoroutineなどの機能を使ったり、
+クリーンアーキテクチャを目指したりして、kotlinで簡単的なTODOアプリケーションです。
