@@ -5,9 +5,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.example.todolist.data.database.TodoDao
 import com.example.todolist.data.database.TodoDatabase
 import com.example.todolist.data.model.Todo
+import com.example.todolist.data.repository.TodoRepository
 import com.jraska.livedata.TestObserver
 import com.jraska.livedata.test
 import org.junit.After
@@ -20,13 +20,13 @@ import org.robolectric.RobolectricTestRunner
 
 
 /**
- * TODO Maybe test UseCase instead of db directly
+ * リポジトリ用の単体テストクラスです
  */
 @RunWith(RobolectricTestRunner::class)
 class TodoDatabaseTest {
-    private lateinit var todoDao: TodoDao
+    private lateinit var repository: TodoRepository
     private lateinit var db: TodoDatabase
-    lateinit var context: Context
+    private lateinit var context: Context
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -37,7 +37,7 @@ class TodoDatabaseTest {
         db = Room.inMemoryDatabaseBuilder(context, TodoDatabase::class.java)
             .allowMainThreadQueries()
             .build()
-        todoDao = db.todoDao()
+        repository = TodoRepository(db.todoDao())
     }
 
     @After
@@ -48,11 +48,11 @@ class TodoDatabaseTest {
     @Test
     fun `write and get Todo Test ` () {
         val todo = Todo(1, "todo text", false)
-        val inputCount = todoDao.insertTodo(todo)
+        val inputCount = repository.insertTodo(todo)
 
         assertTrue(inputCount == 1.toLong())
 
-        val resultLiveData = todoDao.getAllTodo()
+        val resultLiveData = repository.getAllTodo()
 
         resultLiveData.test()
             .awaitValue()
@@ -63,14 +63,14 @@ class TodoDatabaseTest {
     @Test
     fun `Insert, modify and get Todo Test` () {
         val todo = Todo(1, "todo text", false)
-        todoDao.insertTodo(todo)
+        repository.insertTodo(todo)
 
         todo.mDone = true
         todo.mContent = "Nothing"
 
-        todoDao.updateTodo(todo)
+        repository.updateTodo(todo)
 
-        val resultLiveData = todoDao.getAllTodo()
+        val resultLiveData = repository.getAllTodo()
 
         resultLiveData.test()
             .awaitValue()
@@ -82,9 +82,9 @@ class TodoDatabaseTest {
     @Test
     fun `Insert, delete and get Todo Test` () {
         val todo = Todo(1, "todo text", false)
-        todoDao.insertTodo(todo)
-        todoDao.deleteTodo(todo)
-        val resultLiveData = todoDao.getAllTodo()
+        repository.insertTodo(todo)
+        repository.deleteTodo(todo)
+        val resultLiveData = repository.getAllTodo()
 
         resultLiveData.test()
             .awaitValue()
@@ -97,11 +97,11 @@ class TodoDatabaseTest {
         val todo = Todo(1, "todo text", false)
         val todoCompleted = Todo(2, "shopping", true)
         val todoCompleted2 = Todo(3, "dentist", true)
-        todoDao.insertTodo(todo)
-        todoDao.insertTodo(todoCompleted)
-        todoDao.insertTodo(todoCompleted2)
-        todoDao.deleteAllCompleted()
-        val resultLiveData = todoDao.getAllTodo()
+        repository.insertTodo(todo)
+        repository.insertTodo(todoCompleted)
+        repository.insertTodo(todoCompleted2)
+        repository.deleteAllCompleted()
+        val resultLiveData = repository.getAllTodo()
 
         resultLiveData.test()
             .awaitValue()
@@ -114,12 +114,12 @@ class TodoDatabaseTest {
         val todo = Todo(1, "todo text", false)
         val todoCompleted = Todo(2, "shopping", false)
         val todoCompleted2 = Todo(3, "dentist", true)
-        todoDao.insertTodo(todo)
-        todoDao.insertTodo(todoCompleted)
-        todoDao.insertTodo(todoCompleted2)
-        todoDao.updateCompletion(1) // 1 = true
+        repository.insertTodo(todo)
+        repository.insertTodo(todoCompleted)
+        repository.insertTodo(todoCompleted2)
+        repository.updateCompletion(1) // 1 = true
 
-        val liveData: LiveData<List<Todo>> = todoDao.getAllTodo()
+        val liveData: LiveData<List<Todo>> = repository.getAllTodo()
         val testObserver = TestObserver.test(liveData)
 
         // リストでは全アイテムのmDoneがぞれぞtrueになっていないことを確認

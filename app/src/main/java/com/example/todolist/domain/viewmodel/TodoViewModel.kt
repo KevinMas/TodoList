@@ -1,4 +1,4 @@
-package com.example.todolist.presentation.viewmodel
+package com.example.todolist.domain.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -10,7 +10,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 /**
- * TodoビューをDATAレイアと栂ぐためのViewModelクラスです。
+ * TodoビューをDATAレイアと繋ぐためのViewModelクラスです。
  */
 class TodoViewModel(application: Application) :
     AndroidViewModel(application),

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.data.model.Todo
 import com.example.todolist.presentation.adapter.TodoRecyclerAdapter
-import com.example.todolist.presentation.viewmodel.TodoViewModel
+import com.example.todolist.domain.viewmodel.TodoViewModel
 import kotlinx.android.synthetic.main.todo_activity_main.*
 
 /**
