@@ -118,50 +118,37 @@ class TodoActivity : AppCompatActivity() {
      * フィルタリングのOnClickを設定する関数です。
      */
     private fun initFilteringButton() {
-        // もし現在フィルタリングフラグはnullであれば、ALLに設定し、ボタンをアクティブし設定する
-        if(mCurrentFilter == null ) {
-            mCurrentFilter = TodoRecyclerAdapter.TodoFilter.ALL
-            all_button.isActivated = true
-        }
-
-        all_button.setOnClickListener {
-            mCurrentFilter = TodoRecyclerAdapter.TodoFilter.ALL
-            all_button.isActivated = true
-            active_button.isActivated = false
-            completed_button.isActivated = false
-            mAdapter.filterData(mCurrentFilter)
-    }
-
-        active_button.setOnClickListener {
-            mCurrentFilter = TodoRecyclerAdapter.TodoFilter.ACTIVE
-            active_button.isActivated = true
-            completed_button.isActivated = false
-            all_button.isActivated = false
-            mAdapter.filterData(mCurrentFilter)
-        }
-
-        completed_button.setOnClickListener {
-            mCurrentFilter = TodoRecyclerAdapter.TodoFilter.COMPLETED
-            completed_button.isActivated = true
-            active_button.isActivated = false
-            all_button.isActivated = false
-            mAdapter.filterData(mCurrentFilter)
+        filter_radio_group.setOnCheckedChangeListener { _, id ->
+            when (id) {
+                R.id.all_radio_btn -> {
+                    mCurrentFilter = TodoRecyclerAdapter.TodoFilter.ALL
+                    mAdapter.filterData(mCurrentFilter)
+                }
+                R.id.active_radio_btn -> {
+                    mCurrentFilter = TodoRecyclerAdapter.TodoFilter.ACTIVE
+                    mAdapter.filterData(mCurrentFilter)
+                }
+                R.id.completed_radio_btn -> {
+                    mCurrentFilter = TodoRecyclerAdapter.TodoFilter.COMPLETED
+                    mAdapter.filterData(mCurrentFilter)
+                }
+            }
         }
     }
 
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(TodoRecyclerAdapter.TodoFilter.ALL.toString(), all_button.isActivated)
-        outState.putBoolean(TodoRecyclerAdapter.TodoFilter.ACTIVE.toString(), active_button.isActivated)
-        outState.putBoolean(TodoRecyclerAdapter.TodoFilter.COMPLETED.toString(), completed_button.isActivated)
+        outState.putBoolean(TodoRecyclerAdapter.TodoFilter.ALL.toString(), all_radio_btn.isChecked)
+        outState.putBoolean(TodoRecyclerAdapter.TodoFilter.ACTIVE.toString(), active_radio_btn.isChecked)
+        outState.putBoolean(TodoRecyclerAdapter.TodoFilter.COMPLETED.toString(), completed_radio_btn.isChecked)
         outState.putSerializable(CURRENT_FILTER, mCurrentFilter)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        all_button.isActivated = savedInstanceState.getBoolean(TodoRecyclerAdapter.TodoFilter.ALL.toString())
-        active_button.isActivated = savedInstanceState.getBoolean(TodoRecyclerAdapter.TodoFilter.ACTIVE.toString())
-        completed_button.isActivated = savedInstanceState.getBoolean(TodoRecyclerAdapter.TodoFilter.COMPLETED.toString())
+        all_radio_btn.isChecked = savedInstanceState.getBoolean(TodoRecyclerAdapter.TodoFilter.ALL.toString())
+        active_radio_btn.isChecked = savedInstanceState.getBoolean(TodoRecyclerAdapter.TodoFilter.ACTIVE.toString())
+        completed_radio_btn.isChecked = savedInstanceState.getBoolean(TodoRecyclerAdapter.TodoFilter.COMPLETED.toString())
         super.onRestoreInstanceState(savedInstanceState)
     }
 }
