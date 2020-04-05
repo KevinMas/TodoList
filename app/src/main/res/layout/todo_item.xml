@@ -15,7 +15,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-  <com.example.todolist.presentation.util.ClearFocusEditText
+  <com.example.todolist.ui.util.ClearFocusEditText
     android:id="@+id/todo_content"
     style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox"
     android:layout_width="0dp"

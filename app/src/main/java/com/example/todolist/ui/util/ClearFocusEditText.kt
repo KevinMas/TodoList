@@ -1,4 +1,4 @@
-package com.example.todolist.presentation.util
+package com.example.todolist.ui.util
 
 import android.content.Context
 import android.util.AttributeSet

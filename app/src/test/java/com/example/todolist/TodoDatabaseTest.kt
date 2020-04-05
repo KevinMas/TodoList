@@ -5,9 +5,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.example.todolist.data.database.TodoDatabase
-import com.example.todolist.data.model.Todo
-import com.example.todolist.data.repository.TodoRepository
+import com.example.todolist.repository.database.TodoDatabase
+import com.example.todolist.model.Todo
+import com.example.todolist.repository.TodoRepository
 import com.jraska.livedata.TestObserver
 import com.jraska.livedata.test
 import org.junit.After
@@ -65,8 +65,8 @@ class TodoDatabaseTest {
         val todo = Todo(1, "todo text", false)
         repository.insertTodo(todo)
 
-        todo.mDone = true
-        todo.mContent = "Nothing"
+        todo.done = true
+        todo.content = "Nothing"
 
         repository.updateTodo(todo)
 
@@ -123,7 +123,7 @@ class TodoDatabaseTest {
         val testObserver = TestObserver.test(liveData)
 
         // リストでは全アイテムのmDoneがぞれぞtrueになっていないことを確認
-        assertTrue(testObserver.value().none{ !it.mDone })
+        assertTrue(testObserver.value().none{ !it.done })
 
     }
 

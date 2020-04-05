@@ -1,4 +1,4 @@
-package com.example.todolist.presentation
+package com.example.todolist.ui
 
 import android.os.Bundle
 import android.text.Editable
@@ -11,9 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
-import com.example.todolist.data.model.Todo
-import com.example.todolist.presentation.adapter.TodoRecyclerAdapter
-import com.example.todolist.domain.viewmodel.TodoViewModel
+import com.example.todolist.model.Todo
+import com.example.todolist.ui.adapter.TodoRecyclerAdapter
+import com.example.todolist.viewmodel.TodoViewModel
 import kotlinx.android.synthetic.main.todo_activity_main.*
 
 /**
@@ -21,11 +21,10 @@ import kotlinx.android.synthetic.main.todo_activity_main.*
  */
 class TodoActivity : AppCompatActivity() {
 
-    private val CURRENT_FILTER: String = "current_filter"
-    private var mCurrentFilter : TodoRecyclerAdapter.TodoFilter? = TodoRecyclerAdapter.TodoFilter.ALL
+    private var currentFilter : TodoRecyclerAdapter.TodoFilter? = TodoRecyclerAdapter.TodoFilter.ALL
 
-    private lateinit var mAdapter: TodoRecyclerAdapter
-    private lateinit var mTodoViewModel: TodoViewModel
+    private lateinit var todoRecyclerAdapter: TodoRecyclerAdapter
+    private lateinit var todoViewModel: TodoViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,17 +33,17 @@ class TodoActivity : AppCompatActivity() {
         // RecyclerViewを準備する
         todo_recyclerView.layoutManager = LinearLayoutManager(this)
         // アダプター作成
-        mAdapter = TodoRecyclerAdapter(this,
-            { todo, done -> mTodoViewModel.toggleDone(todo, done) },
-            { todo -> mTodoViewModel.updateTodo(todo) },
-            { todo -> mTodoViewModel.deleteTodo(todo) }
+        todoRecyclerAdapter = TodoRecyclerAdapter(this,
+            { todo, done -> todoViewModel.toggleDone(todo, done) },
+            { todo -> todoViewModel.updateTodo(todo) },
+            { todo -> todoViewModel.deleteTodo(todo) }
         )
         // RecyclerViewにアダプターを設定
-        todo_recyclerView.adapter = mAdapter
+        todo_recyclerView.adapter = todoRecyclerAdapter
 
         // 選択中のフィルタリングを保存されたものから情報を戻してみる
-        mCurrentFilter =
-            savedInstanceState?.getSerializable(CURRENT_FILTER) as? TodoRecyclerAdapter.TodoFilter
+        currentFilter =
+            savedInstanceState?.getSerializable(Companion.CURRENT_FILTER) as? TodoRecyclerAdapter.TodoFilter
 
         // TODOを追加EditTextをイニシャライズ
         initTodoAddEditText()
@@ -54,16 +53,16 @@ class TodoActivity : AppCompatActivity() {
         initFilteringButton()
 
         // TODO用のViewModelを準備
-        mTodoViewModel = ViewModelProviders.of(this).get(TodoViewModel::class.java)
+        todoViewModel = ViewModelProviders.of(this).get(TodoViewModel::class.java)
 
         // LiveDataを見張って、RecyclerViewの情報を更新したり、矢印の色を更新したりします
-        mTodoViewModel.todos.observe(this, Observer { todos ->
+        todoViewModel.todos.observe(this, Observer { todos ->
             todos?.let {
                 // RecyclerViewの情報を更新
-                mAdapter.setTodos(todos, mCurrentFilter)
+                todoRecyclerAdapter.setTodos(todos, currentFilter)
                 // データによって、完了アイテムを削除ボタンのビジビリティを更新
                 clear_completed_button.visibility =
-                    if (todos.none { it.mDone }) View.GONE else View.VISIBLE
+                    if (todos.none { it.done }) View.GONE else View.VISIBLE
             }
         })
     }
@@ -80,7 +79,7 @@ class TodoActivity : AppCompatActivity() {
                     //もしあれば、改行文字削除する
                     val todo = Todo(0, content.replace("\n", ""), false)
                     //新登録処理を呼ぶ
-                    mTodoViewModel.insertTodo(todo)
+                    todoViewModel.insertTodo(todo)
                     // 内容を消します
                     add_todo_editText.setText("")
                 }
@@ -93,10 +92,10 @@ class TodoActivity : AppCompatActivity() {
             if (event.action == MotionEvent.ACTION_UP &&
                 event.rawX <= (add_todo_editText.left + add_todo_editText.compoundDrawables[0].bounds.width())) {
                 // もし、全アイテムは完了ではなかったら、全部を完了に更新したり、逆に全部を無完了にしたりする
-                if (mTodoViewModel.todos.value?.none { !it.mDone }!!) {
-                    mTodoViewModel.updateCompletion(0)
+                if (todoViewModel.todos.value?.none { !it.done }!!) {
+                    todoViewModel.updateCompletion(0)
                 } else {
-                    mTodoViewModel.updateCompletion(1)
+                    todoViewModel.updateCompletion(1)
                 }
                 return@setOnTouchListener true
             }
@@ -110,7 +109,7 @@ class TodoActivity : AppCompatActivity() {
     private fun initClearCompletedButton() {
         // 全完了TODOアイテムを消すOnClickの準備
         clear_completed_button.setOnClickListener {
-            mTodoViewModel.deleteAllCompleted()
+            todoViewModel.deleteAllCompleted()
         }
     }
 
@@ -119,20 +118,13 @@ class TodoActivity : AppCompatActivity() {
      */
     private fun initFilteringButton() {
         filter_radio_group.setOnCheckedChangeListener { _, id ->
-            when (id) {
-                R.id.all_radio_btn -> {
-                    mCurrentFilter = TodoRecyclerAdapter.TodoFilter.ALL
-                    mAdapter.filterData(mCurrentFilter)
-                }
-                R.id.active_radio_btn -> {
-                    mCurrentFilter = TodoRecyclerAdapter.TodoFilter.ACTIVE
-                    mAdapter.filterData(mCurrentFilter)
-                }
-                R.id.completed_radio_btn -> {
-                    mCurrentFilter = TodoRecyclerAdapter.TodoFilter.COMPLETED
-                    mAdapter.filterData(mCurrentFilter)
-                }
+            currentFilter = when (id) {
+                R.id.all_radio_btn -> TodoRecyclerAdapter.TodoFilter.ALL
+                R.id.active_radio_btn -> TodoRecyclerAdapter.TodoFilter.ACTIVE
+                R.id.completed_radio_btn -> TodoRecyclerAdapter.TodoFilter.COMPLETED
+                else -> TodoRecyclerAdapter.TodoFilter.ALL
             }
+            todoRecyclerAdapter.filterData(currentFilter)
         }
     }
 
@@ -141,7 +133,7 @@ class TodoActivity : AppCompatActivity() {
         outState.putBoolean(TodoRecyclerAdapter.TodoFilter.ALL.toString(), all_radio_btn.isChecked)
         outState.putBoolean(TodoRecyclerAdapter.TodoFilter.ACTIVE.toString(), active_radio_btn.isChecked)
         outState.putBoolean(TodoRecyclerAdapter.TodoFilter.COMPLETED.toString(), completed_radio_btn.isChecked)
-        outState.putSerializable(CURRENT_FILTER, mCurrentFilter)
+        outState.putSerializable(Companion.CURRENT_FILTER, currentFilter)
         super.onSaveInstanceState(outState)
     }
 
@@ -150,6 +142,10 @@ class TodoActivity : AppCompatActivity() {
         active_radio_btn.isChecked = savedInstanceState.getBoolean(TodoRecyclerAdapter.TodoFilter.ACTIVE.toString())
         completed_radio_btn.isChecked = savedInstanceState.getBoolean(TodoRecyclerAdapter.TodoFilter.COMPLETED.toString())
         super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    companion object {
+        private const val CURRENT_FILTER: String = "current_filter"
     }
 }
 

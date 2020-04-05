@@ -1,11 +1,11 @@
-package com.example.todolist.domain.viewmodel
+package com.example.todolist.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.example.todolist.data.database.TodoDatabase
-import com.example.todolist.data.model.Todo
-import com.example.todolist.data.repository.TodoRepository
+import com.example.todolist.repository.database.TodoDatabase
+import com.example.todolist.model.Todo
+import com.example.todolist.repository.TodoRepository
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -45,7 +45,7 @@ class TodoViewModel(application: Application) :
      * TODOアイテムを完了にアップデートする関数です
      */
     fun toggleDone(todo : Todo, checked : Boolean) {
-        todo.mDone = checked
+        todo.done = checked
         updateTodo(todo)
     }
 

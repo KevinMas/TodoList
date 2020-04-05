@@ -1,8 +1,8 @@
-package com.example.todolist.data.database
+package com.example.todolist.repository.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.todolist.data.model.Todo
+import com.example.todolist.model.Todo
 
 /**
  * RoomにリクエストするDAOクラスです。

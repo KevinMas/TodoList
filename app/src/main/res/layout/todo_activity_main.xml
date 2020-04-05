@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="#66FFF176"
-  tools:context=".presentation.TodoActivity">
+  tools:context=".ui.TodoActivity">
 
     <Button
       android:id="@+id/clear_completed_button"
@@ -22,7 +22,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/add_todo_editText" />
 
-  <TextView
+     <TextView
       android:id="@+id/textView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
-  <com.example.todolist.presentation.util.ClearFocusEditText
+  <com.example.todolist.ui.util.ClearFocusEditText
     android:id="@+id/add_todo_editText"
     android:layout_width="0dp"
     android:layout_height="wrap_content"

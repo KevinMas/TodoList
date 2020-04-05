@@ -1,8 +1,8 @@
-package com.example.todolist.data.repository
+package com.example.todolist.repository
 
 import androidx.lifecycle.LiveData
-import com.example.todolist.data.database.TodoDao
-import com.example.todolist.data.model.Todo
+import com.example.todolist.repository.database.TodoDao
+import com.example.todolist.model.Todo
 
 /**
  * レポジトリクラスです。ViewModelと繋がって、
