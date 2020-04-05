@@ -1,4 +1,4 @@
 # TodoList
 
 本プロジェクトはRoomやCoroutineなどの機能を使ったり、
-クリーンアーキテクチャを目指したりして、kotlinで簡単的なTODOアプリケーションです。
+kotlinとMVVMアーキテクチャで簡単的なTODOアプリケーションです。
